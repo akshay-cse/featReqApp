@@ -1,0 +1,26 @@
+{% for feature in feature_list %}
+<tr>
+  <td>{{ feature.id }}</td>
+  <td>{{ feature.title }}</td>
+  <td>{{ feature.description }}</td>
+  <td>{{ feature.target_date }}</td>
+  <td>{{ feature.get_product_area_display }}</td>
+  <td>
+      <button type="button"
+              class="btn btn-warning btn-sm js-update-feature"
+              data-url="{% url 'feature_update' feature.id %}">
+        <span class="glyphicon glyphicon-pencil"></span> Edit
+      </button>
+      <button type="button"
+        class="btn btn-danger btn-sm js-delete-feature"
+        data-url="{% url 'feature_delete' feature.id %}">
+      <span class="glyphicon glyphicon-trash"></span> Delete
+      </button>
+    </td>
+  
+</tr>
+{% empty %}
+<tr>
+  <td colspan="7" class="text-center bg-warning">No feature request in DB</td>
+</tr>
+{% endfor %}

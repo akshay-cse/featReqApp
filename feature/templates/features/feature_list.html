@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block javascript %}
+  <script src="{% static 'features/js/features.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+  <h1 class="page-header">Features requests </h1>
+
+  <!-- BUTTON TO TRIGGER THE ACTION -->
+  <p>
+      <button type="button"
+              class="btn btn-primary js-create-feature"
+              data-url="{% url 'feature_create' %}">
+        <span class="glyphicon glyphicon-plus"></span>
+        New Feature requests
+      </button>
+  </p>
+
+  <table class="table" id="book-table">
+    <!-- TABLE CONTENT SUPPRESSED FOR BREVITY'S SAKE -->
+    <thead>
+        <tr>
+          <th>#</th>
+          <th>Title</th>
+          <th>Description</th>
+          <th>Target Date</th>
+          <th>Product Area</th>
+          
+        </tr>
+      </thead>
+      <tbody>
+        {% include 'features/includes/partial_feature_list.html' %}
+      </tbody>
+
+  </table>
+
+  <!-- THE MODAL WE WILL BE USING -->
+  <div class="modal fade" id="modal-book">
+    <div class="modal-dialog">
+      <div class="modal-content">
+      </div>
+    </div>
+{% endblock %}
