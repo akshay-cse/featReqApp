@@ -51,6 +51,7 @@ $(function () {
 
       var loadForm = function () {
         var btn = $(this);
+        debugger;
         $.ajax({
           url: btn.attr("data-url"),
           type: 'get',

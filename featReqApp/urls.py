@@ -25,4 +25,5 @@ urlpatterns = [
     url(r'^features/create/$', views.feature_create, name='feature_create'),
     url(r'^features/(?P<pk>\d+)/update/$', views.feature_update, name='feature_update'),
     url(r'^features/(?P<pk>\d+)/delete/$', views.feature_delete, name='feature_delete'),
+    url(r'^client/create/$', views.create_client, name='create_client')
 ]

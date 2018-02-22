@@ -32,6 +32,6 @@ class Feature(models.Model):
 #Client Model
 class Client(models.Model):
     client_name = models.CharField(max_length=50)
-    createdOn = models.DateField()  
+    createdOn = models.DateField(blank=True, null=True)  
 
 

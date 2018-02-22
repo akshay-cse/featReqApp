@@ -3,15 +3,16 @@ from django.shortcuts import render
 # Create your views here.
 
 from django.shortcuts import render, get_object_or_404
-from .models import Feature
-from django.http import JsonResponse
+from .models import Feature,Client
+from django.http import JsonResponse,HttpResponse
 from django.template.loader import render_to_string
 from .forms import FeatureForm
 
 # just fetching list of features list already present in db
 def feature_list(request):
     features = Feature.objects.all()
-    return render(request, 'features/feature_list.html', {'feature_list': features})
+    clients = Client.objects.all()
+    return render(request, 'features/feature_list.html', {'feature_list': features,'client_list':clients})
 
 # we are not rendering a template but returning a Json response.
 # Now we refactor the feature_create view to reuse its code in the feature_update view:
@@ -39,6 +40,16 @@ def save_feature_form(request, form, template_name):
     context = {'form': form}
     data['html_form'] = render_to_string(template_name, context, request=request)
     return JsonResponse(data)
+
+
+
+def create_client(request):
+     if 'client' in request.GET:
+        client_name = request.GET['client']
+        #Client.objects.create(name=client_name)
+        Client.objects.create(client_name=client_name)
+        message = 'You created client : %r' % request.GET['client']
+        return HttpResponse(message)
 
 def feature_update(request, pk):
     feature = get_object_or_404(Feature, pk=pk)
