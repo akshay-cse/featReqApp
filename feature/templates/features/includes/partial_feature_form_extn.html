@@ -9,3 +9,12 @@
     {% endfor %}
   </div>
 {% endfor %}
+<div class="form-group">
+  <label for="client_list">Client list</label>
+  <select class="form-control" id="id_feat_priority" name="feat_priority">
+    <option value="" selected="selected">---------</option>
+    {% for client in clients %}
+      <option value={{ client.id }}>{{ client.client_name}}</option>
+    {% endfor %}
+  </select>
+</div>
