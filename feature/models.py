@@ -36,7 +36,7 @@ class Feature(models.Model):
     product_area = models.PositiveSmallIntegerField(choices=AREA_TYPES, blank=True, null=True)
     feat_priority = models.PositiveSmallIntegerField(choices=PRIORITY_TYPES, blank=True, null=True)
      # client List
-    client = models.ForeignKey('Client',null=True)
+    client = models.ForeignKey('Client',null=True, on_delete=models.CASCADE,)
     
 
  

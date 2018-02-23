@@ -31,7 +31,8 @@ def save_feature_form(request, form, template_name):
         if form.is_valid():
             form.save()
             data['form_is_valid'] = True
-            features = Feature.objects.all()
+            #again sort here
+            features = Feature.objects.all().order_by('-client', '-feat_priority')
             data['html_feature_list'] = render_to_string('features/includes/partial_feature_list.html', {
                 'feature_list': features
             })
