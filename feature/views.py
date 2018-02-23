@@ -10,7 +10,7 @@ from .forms import FeatureForm
 
 # just fetching list of features list already present in db
 def feature_list(request):
-    features = Feature.objects.all()
+    features = Feature.objects.all().order_by('-client', '-feat_priority')
     return render(request, 'features/feature_list.html', {'feature_list': features})
 
 # we are not rendering a template but returning a Json response.
@@ -21,11 +21,11 @@ def feature_create(request):
         form = FeatureForm(request.POST)
     else:
         form = FeatureForm()
-    clients = Client.objects.all() 
-    return save_feature_form(request, form,clients, 'features/includes/partial_feature_create.html')
+    #clients = Client.objects.all() 
+    return save_feature_form(request, form, 'features/includes/partial_feature_create.html')
 
 
-def save_feature_form(request, form, clients, template_name):
+def save_feature_form(request, form, template_name):
     data = dict()
     if request.method == 'POST':
         if form.is_valid():
@@ -37,7 +37,7 @@ def save_feature_form(request, form, clients, template_name):
             })
         else:
             data['form_is_valid'] = False
-    context = {'form': form,'clients':clients}
+    context = {'form': form}
     data['html_form'] = render_to_string(template_name, context, request=request)
     return JsonResponse(data)
 

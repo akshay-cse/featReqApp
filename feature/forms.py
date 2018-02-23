@@ -4,4 +4,4 @@ from .models import Feature
 class FeatureForm(forms.ModelForm):
     class Meta:
         model = Feature
-        fields = ('title', 'description', 'target_date', 'product_area','feat_priority', )
+        fields = ('title', 'description', 'target_date', 'product_area','feat_priority','client', )

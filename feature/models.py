@@ -19,9 +19,9 @@ class Feature(models.Model):
         (CLAIM, 'Claims'),
         (REPORT,'Reports'),
     )
-    HIGH = 3
-    MEDIUM = 2
     LOW = 1
+    MEDIUM = 2
+    HIGH = 3
     PRIORITY_TYPES = (
         (HIGH, 'High'),
         (MEDIUM, 'Medium'),
@@ -29,11 +29,12 @@ class Feature(models.Model):
     )
     title = models.CharField(max_length=50)
     description = models.CharField(max_length=200, blank=True)
-    # client List
     target_date = models.DateField(blank=True, null=True)
     product_area = models.PositiveSmallIntegerField(choices=AREA_TYPES, blank=True, null=True)
     feat_priority = models.PositiveSmallIntegerField(choices=PRIORITY_TYPES, blank=True, null=True)
-    client = models.ForeignKey('Client',on_delete=models.CASCADE)
+     # client List
+    client = models.ForeignKey('Client',null=True)
+    
 
  
 
