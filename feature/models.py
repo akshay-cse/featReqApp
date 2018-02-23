@@ -7,6 +7,9 @@ class Client(models.Model):
     client_name = models.CharField(max_length=50)
     createdOn = models.DateField(blank=True, null=True) 
 
+    def __str__(self):
+        return self.client_name
+
 # Create your models here.
 class Feature(models.Model):
     POLICY = 1
