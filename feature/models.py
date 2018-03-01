@@ -25,18 +25,22 @@ class Feature(models.Model):
     LOW = 1
     MEDIUM = 2
     HIGH = 3
-    PRIORITY_TYPES = (
-        (HIGH, 'High'),
-        (MEDIUM, 'Medium'),
-        (LOW, 'Low'),
-    )
+    # PRIORITY_TYPES = (
+    #     (HIGH, 'High'),
+    #     (MEDIUM, 'Medium'),
+    #     (LOW, 'Low'),
+    # )
     title = models.CharField(max_length=50)
     description = models.CharField(max_length=200, blank=True)
     target_date = models.DateField(blank=True, null=True)
     product_area = models.PositiveSmallIntegerField(choices=AREA_TYPES, blank=True, null=True)
-    feat_priority = models.PositiveSmallIntegerField(choices=PRIORITY_TYPES, blank=True, null=True)
+    #Values from 0 to 32767 are safe in all databases supported by Django.
+    feat_priority = models.PositiveIntegerField(blank=False, null=False)
      # client List
     client = models.ForeignKey('Client',null=True, on_delete=models.CASCADE,)
+
+    class Meta:
+        unique_together = ('feat_priority', 'client',)
     
 
  
