@@ -48,5 +48,4 @@ class Feature_Views_Test(Setup_Class):
         cl = Client()
         response = cl.post("/features/create/", {'title': "Blockchain", 'description': "bond-family txn-1", 'target_date': "09/09/2018", 'product_area': 1,'feat_priority':1,'client':''})
         self.assertTrue('"form_is_valid": false'.encode() in response.content)
-        #self.assertFalse(form.is_valid())
 

@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 from django.db import models
+from django.core.exceptions import NON_FIELD_ERRORS
 import datetime
 
 #Client Model
@@ -35,12 +36,13 @@ class Feature(models.Model):
     target_date = models.DateField(blank=True, null=True)
     product_area = models.PositiveSmallIntegerField(choices=AREA_TYPES, blank=True, null=True)
     #Values from 0 to 32767 are safe in all databases supported by Django.
-    feat_priority = models.PositiveIntegerField(blank=False, null=False)
+    feat_priority = models.PositiveIntegerField(blank=False, null=False,)
     #client List
-    client = models.ForeignKey('Client',null=True, on_delete=models.CASCADE,)
+    client = models.ForeignKey('Client',null=False, on_delete=models.CASCADE,)
 
     class Meta:
-        unique_together = ('feat_priority', 'client',)
+        unique_together = (('feat_priority', 'client',),)
+    
     
 
  

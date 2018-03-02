@@ -46,7 +46,6 @@ def feature_create(request):
         data = dict()
         if request.method == 'POST':
             logger.info('Request type is POST; While Saving data')
-            print (request.POST)
             form = FeatureForm(request.POST)
         else:
             logger.info('Request type is GET')

@@ -1,5 +1,9 @@
 {% load widget_tweaks %}
 
+{% for error in form.non_field_errors %}
+  {{error}}
+{% endfor %}
+
 {% for field in form %}
   <div class="form-group{% if field.errors %} has-error{% endif %}">
     <label for="{{ field.id_for_label }}">{{ field.label }}</label>
@@ -9,12 +13,3 @@
     {% endfor %}
   </div>
 {% endfor %}
-<!-- <div class="form-group">
-  <label for="client_list">Client list</label>
-  <select class="form-control" id="id_feat_priority" name="feat_priority">
-    <option value="" selected="selected">---------</option>
-    {% for client in clients %}
-      <option value={{ client.id }}>{{ client.client_name}}</option>
-    {% endfor %}
-  </select>
-</div> -->
