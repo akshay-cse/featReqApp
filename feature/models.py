@@ -36,7 +36,7 @@ class Feature(models.Model):
     product_area = models.PositiveSmallIntegerField(choices=AREA_TYPES, blank=True, null=True)
     #Values from 0 to 32767 are safe in all databases supported by Django.
     feat_priority = models.PositiveIntegerField(blank=False, null=False)
-     # client List
+    #client List
     client = models.ForeignKey('Client',null=True, on_delete=models.CASCADE,)
 
     class Meta:
