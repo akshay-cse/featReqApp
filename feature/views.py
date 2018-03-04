@@ -29,12 +29,13 @@ logger.addHandler(consoleHandler)
 def feature_list(request):
     try:
         #Info level msg
-        logger.info('Fetching feature request list')
+        logger.info('feature_list - Starting request %s', request)
+        logger.info('feature_list - Fetching feature request list')
         features = Feature.objects.all().order_by('-client', '-feat_priority')
-        logger.info('Returning response: %s', features)
+        logger.info('feature_list - Returning response: %s', features)
         return render(request, 'features/feature_list.html', {'feature_list': features})
     except Exception as err:
-        logger.error('Failed to get the feature list', exc_info=True)
+        logger.error('feature_list - Failed to get the feature list', exc_info=True)
         return HttpResponse(err) 
 
 # we are not rendering a template but returning a Json response.
@@ -42,23 +43,21 @@ def feature_list(request):
 def feature_create(request):
     logger.info('Create feature request')
     try:
-        logger.info('Starting request %s', request)
+        logger.info('feature_create - Starting request %s', request)
         data = dict()
         if request.method == 'POST':
-            logger.info('Request type is POST; While Saving data')
             form = FeatureForm(request.POST)
         else:
-            logger.info('Request type is GET')
             form = FeatureForm()
             #clients = Client.objects.all() 
         return save_feature_form(request, form, 'features/includes/partial_feature_create.html')
     except Exception as err:
-        logger.error('Failed to create the feature request', exc_info=True)
+        logger.error('feature_create - Failed to create the feature request', exc_info=True)
         return HttpResponse(err)     
 
 def save_feature_form(request, form, template_name):
     try:
-        logger.info('Starting request %s', request)
+        logger.info('save_feature_form - Starting request %s and input param %s', request,form )
         data = dict()
         if request.method == 'POST':
             if form.is_valid():
@@ -73,17 +72,17 @@ def save_feature_form(request, form, template_name):
                 data['form_is_valid'] = False
         context = {'form': form}
         data['html_form'] = render_to_string(template_name, context, request=request)
-        logger.info('Returning response: %s', JsonResponse(data))
+        logger.info('save_feature_form - Returning response: %s', JsonResponse(data))
         return JsonResponse(data)
     except Exception as err:
-        logger.error('Failed to save form data', exc_info=True)
+        logger.error('save_feature_form - Failed to save form data', exc_info=True)
         return HttpResponse(err)    
 
 
 def create_client(request):
     logger.info('Creating Client')
     try:
-        logger.info('Starting request %s', request)
+        logger.info('create_client - Starting request %s', request)
         if 'client' in request.GET:
             client_name = request.GET['client']
             #Client.objects.create(name=client_name)
@@ -92,27 +91,28 @@ def create_client(request):
             logger.info('Returning response: %s', message) 
             return HttpResponse(message)
     except Exception as err:
-        logger.error('Failed to create client', exc_info=True)
+        logger.error('create_client - Failed to create client', exc_info=True)
         return HttpResponse(err)
 
 def feature_update(request, pk):
     logger.info('Update feature request')
     try:
-        logger.info('Starting request %s', request)
+        logger.info('feature_update - Starting request %s and input param pk is %s', request, pk)
         feature = get_object_or_404(Feature, pk=pk)
         if request.method == 'POST':
             form = FeatureForm(request.POST, instance=feature)
         else:
             form = FeatureForm(instance=feature)
-        logger.info('Returning response: %s', JsonResponse(data))     
+        logger.info('feature_update - Returning response: %s', JsonResponse(data))     
         return save_feature_form(request, form, 'features/includes/partial_feature_update.html')
     except Exception as err:
+        logger.error('feature_update - Failed to update feature', exc_info=True)
         return HttpResponse(err)
 
 def feature_delete(request, pk):
-    logger.info('Delete feature request')
+    logger.info('feature_delete - Delete feature request')
     try:
-        logger.info('Starting request %s', request)
+        logger.info('feature_delete - Starting request %s and input param pk is %s ', request,pk)
         feature = get_object_or_404(Feature, pk=pk)
         data = dict()
         if request.method == 'POST':
@@ -128,8 +128,8 @@ def feature_delete(request, pk):
                 context,
                 request=request,
             )
-        logger.info('Returning response: %s', JsonResponse(data))    
+        logger.info('feature_delete - Returning response: %s', JsonResponse(data))    
         return JsonResponse(data)
     except Exception as err:
-        logger.error('Failed to delete feature', exc_info=True)
+        logger.error('feature_delete - Failed to delete feature', exc_info=True)
         return HttpResponse(err)

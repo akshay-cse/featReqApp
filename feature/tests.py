@@ -16,14 +16,22 @@ class Feature_Form_Test(TestCase):
     # Valid Form Data
     def test_FeatureForm_valid(self):
         client = Client.objects.create(client_name='Test')
-        form = FeatureForm(data={'title': "Blockchain", 'description': "bond-family txn-1", 'target_date': '09/09/2018', 'product_area': '1','feat_priority':'16','client':client.id})
+        form = FeatureForm(data={'title': "Blockchain", 'description': "bond-family txn-1", 'target_date': '09/09/2018', 'product_area': '1','feat_priority':'1','client':client.id})
         self.assertTrue(form.is_valid())
+
+    # Valid Form Data with same client and same priority
+    def test_FeatureForm_valid(self):
+        client = Client.objects.create(client_name='Test')
+        form = FeatureForm(data={'title': "Blockchain-1", 'description': "bond-family txn-11", 'target_date': '09/10/2018', 'product_area': '1','feat_priority':'1','client':client.id})
+        self.assertTrue(form.is_valid())    
 
     # Invalid Form Data
     def test_FeatureForm_invalid(self):
         client = Client.objects.create(client_name='Test')
         form = FeatureForm (data={'title': "", 'description': "bond-family txn-1", 'target_date': "09/09/2018", 'product_area': 1,'feat_priority':1,'client':client.id})
         self.assertFalse(form.is_valid())
+
+
 
 #When we start testing the vews, first test for the response codes then we got with the actual response.
 class Feature_Views_Test(Setup_Class):
@@ -41,6 +49,20 @@ class Feature_Views_Test(Setup_Class):
         response = cl.get("/features/create/")
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "features/includes/partial_feature_create.html")
+
+    # Valid Data
+    def test_add_featureReq_invalidform_view(self):
+        from django.test import Client
+        cl = Client()
+        response = cl.post("/features/create/", {'title': "Blockchain", 'description': "bond-family txn-1", 'target_date': "09/09/2018", 'product_area': 1,'feat_priority':1,'client':self.client.id})
+        self.assertTrue('"form_is_valid": false'.encode() in response.content)    
+
+    # Valid Data with same client and priority
+    def test_add_featureReq_invalidform_view(self):
+        from django.test import Client
+        cl = Client()
+        response = cl.post("/features/create/", {'title': "Blockchain-1", 'description': "bond-family txn-11", 'target_date': "09/10/2018", 'product_area': 1,'feat_priority':1,'client':self.client.id})
+        self.assertTrue('"form_is_valid": false'.encode() in response.content)  
 
      # Invalid Data
     def test_add_featureReq_invalidform_view(self):
