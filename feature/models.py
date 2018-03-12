@@ -41,8 +41,8 @@ class Feature(models.Model):
     #client List
     client = models.ForeignKey('Client',null=False, on_delete=models.CASCADE,)
 
-    class Meta:
-        unique_together = (('feat_priority', 'client',),)
+    #class Meta:
+        #unique_together = (('feat_priority', 'client',),)
     
     
 

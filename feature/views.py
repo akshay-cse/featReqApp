@@ -8,6 +8,8 @@ from django.http import JsonResponse,HttpResponse
 from django.template.loader import render_to_string
 from .forms import FeatureForm
 
+from django.db.models import F
+
 import logging
 logging.basicConfig(level=logging.DEBUG)
 logFormatter = logging.Formatter("%(asctime)s [%(threadName)-12.12s] [%(levelname)-5.5s]  %(message)s")
@@ -61,6 +63,14 @@ def save_feature_form(request, form, template_name):
         data = dict()
         if request.method == 'POST':
             if form.is_valid():
+                form_data_json = form.cleaned_data
+                client_form_data = form_data_json['client']
+                priority_form_data = form_data_json['feat_priority']
+                # First We have to check whether asked priority slot is vacant or not.
+                feature = Feature.objects.filter(client=client_form_data,feat_priority = priority_form_data)
+                if feature.count() > 0:
+                    # Update all filtered features priority with 1.
+                    Feature.objects.filter(client=client_form_data,feat_priority__gte = priority_form_data).update(feat_priority=F('feat_priority') + 1)
                 form.save()
                 data['form_is_valid'] = True
                 #again sort here
@@ -102,8 +112,7 @@ def feature_update(request, pk):
         if request.method == 'POST':
             form = FeatureForm(request.POST, instance=feature)
         else:
-            form = FeatureForm(instance=feature)
-        logger.info('feature_update - Returning response: %s', JsonResponse(data))     
+            form = FeatureForm(instance=feature)    
         return save_feature_form(request, form, 'features/includes/partial_feature_update.html')
     except Exception as err:
         logger.error('feature_update - Failed to update feature', exc_info=True)
@@ -118,7 +127,7 @@ def feature_delete(request, pk):
         if request.method == 'POST':
             feature.delete()
             data['form_is_valid'] = True  # This is just to play along with the existing code
-            features = Feature.objects.all()
+            features = Feature.objects.all().order_by('-client', '-feat_priority')
             data['html_feature_list'] = render_to_string('features/includes/partial_feature_list.html', {
                 'feature_list': features
             })
