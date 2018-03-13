@@ -19,11 +19,12 @@ from django.views.generic import TemplateView
 from feature import views
 
 urlpatterns = [
-    url(r'^$', TemplateView.as_view(template_name='home.html'), name='home'),
+    url(r'^hello$', TemplateView.as_view(template_name='home.html'), name='home'),
     url(r'^admin/', admin.site.urls),
-    url(r'^features/$', views.feature_list, name='feature_list'),
+    url(r'^$', views.feature_list, name='feature_list'),
     url(r'^features/create/$', views.feature_create, name='feature_create'),
     url(r'^features/(?P<pk>\d+)/update/$', views.feature_update, name='feature_update'),
     url(r'^features/(?P<pk>\d+)/delete/$', views.feature_delete, name='feature_delete'),
-    url(r'^client/create/$', views.create_client, name='create_client')
+    url(r'^client/create/$', views.create_client, name='create_client'),
+    url(r'^client/(?P<clientId>\d+)/maxPriorityAvail/$', views.client_max_priority, name='client_max_priority'),
 ]

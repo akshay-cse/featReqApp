@@ -1,5 +1,7 @@
 {% load widget_tweaks %}
 
+{% load static %}
+
 {% for error in form.non_field_errors %}
   {{error}}
 {% endfor %}
@@ -13,3 +15,7 @@
     {% endfor %}
   </div>
 {% endfor %}
+
+{% block javascript %}
+<script src="{% static 'features/js/form_load.js' %}"></script>
+{% endblock %}

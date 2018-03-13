@@ -1,7 +1,6 @@
 $(function () {
       var loadForm = function () {
         var btn = $(this);
-        debugger;
         $.ajax({
           url: btn.attr("data-url"),
           type: 'get',
@@ -34,6 +33,19 @@ $(function () {
         });
         return false;
       };
+
+      var calMaxPriorityNoForGivenClient = function(clientId){
+        debugger;
+        var client = $(this);
+        $.ajax({
+          url: 'client/'+clientId+'/maxPriorityAvail/',
+          type: 'POST',
+          dataType: 'json',
+          success: function (data) {
+            $("#id_client").val(data['feat_priority__max'])
+          }
+        });
+      };
     
     
       /* Binding */
@@ -49,5 +61,14 @@ $(function () {
       // Delete feature
       $("#book-table").on("click", ".js-delete-feature", loadForm);
       $("#modal-book").on("submit", ".js-feature-delete-form", saveForm);
-    
+
+      var maxFeaturePriorityAvail = function(){
+        var clientId = $("#id_client").val();
+        $("#id_client").change(calMaxPriorityNoForGivenClient(1));
+        if(clientId!=""){
+          
+        }
+        
+      }
+
     });

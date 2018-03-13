@@ -7,8 +7,8 @@ from .models import Feature,Client
 from django.http import JsonResponse,HttpResponse
 from django.template.loader import render_to_string
 from .forms import FeatureForm
+from django.db.models import F,Max
 
-from django.db.models import F
 
 import logging
 logging.basicConfig(level=logging.DEBUG)
@@ -141,4 +141,21 @@ def feature_delete(request, pk):
         return JsonResponse(data)
     except Exception as err:
         logger.error('feature_delete - Failed to delete feature', exc_info=True)
+        return HttpResponse(err)
+
+def client_max_priority(request, clientId):
+    logger.info('client_max_priority - calculate max priority slot available')
+    try:
+        logger.info('client_max_priority - Starting request %s and input param client Id is %s ', request,clientId)
+        client = get_object_or_404(Client, pk=clientId)
+        data = dict()
+        feature = Feature.objects.filter(client=client).aggregate(Max('feat_priority'))
+        if feature['feat_priority__max'] != None:
+            data['feat_priority__max'] = feature['feat_priority__max']+1;
+        else:
+            data['feat_priority__max'] = 1;    
+        logger.info('client_max_priority - Returning response: %s', JsonResponse(data))    
+        return JsonResponse(data)
+    except Exception as err:
+        logger.error('client_max_priority - Failed to find max vacant priority slot', exc_info=True)
         return HttpResponse(err)
