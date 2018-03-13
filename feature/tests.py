@@ -39,7 +39,7 @@ class Feature_Views_Test(Setup_Class):
     def test_features_list_view(self):
         from django.test import Client
         cl = Client()
-        response = cl.get('/features/')
+        response = cl.get('/')
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "features/feature_list.html")
 
